@@ -1,81 +1,114 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Axios from 'axios';
+import { Snackbar } from '@mui/material';
+
+const From = ({ selectedValue }) => {
 
 
-const From = () => {
-    
+
+    const [userData, setUserData] = useState({});
+    const [showMessage, setShowMessage] = useState(false);
+    const toggleToast = () => {
+        setShowMessage(!showMessage);
+    };
+    const handleChange = (e) => {
+        setUserData({
+            ...userData,
+            [e.target.name]: e.target.value,
+        });
+    };
+    const handleSignup = async (e) => {
+        e.preventDefault();
+        console.log(userData);
+        try {
+            let url;
+            selectedValue === 'FAN'
+                ? (url = 'http://wren.in:3200/api/sign-up/fan')
+                : (url = 'http://wren.in:3200/api/sign-up/talent');
+
+            const response = await Axios.post(url, userData);
+            setShowMessage(true);
+        } catch (error) {
+            console.log(error);
+        }
+    };
     return (
         <>
-            {/* <Box sx={{ width: '100%' }}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label="Item One" {...a11yProps(0)} />
-                        <Tab label="Item Two" {...a11yProps(1)} />
-                    </Tabs>
-                </Box>
-            </Box> */}
-            <div className='bg-black py-16'>
-                <div className='flex justify-center rounded-xl bg-zinc-800 text-white mx-80 '>
-                    <div className='mt-10 w-6/12'>
-                        <div className='flex py-6 justify-center'>
-                            <button className=' active:bg-green-500 rounded-full text-xl'>FAN SIGNUP</button>
-                            <button className='bg-green-500 rounded-full text-xl'>TALENT SIGNUP</button>
-                        </div>
-                        <div className='flex text-2xl justify-center font-bold'>
-                            <h1>Create Your fan Account </h1>
-                        </div>
-                        <form>
-                            <div className='flex justify-center py-5 mx-10 flex-col'>
-                                <label for="tittle">Your Name</label>
-                                <input className='border-2 py-2 my-3 rounded-full hover:border-green-400 '
-                                    name='tittle'
-                                    type="text"
-                                    placeholder='Your Name'
-                                />
+            <Snackbar
+                open={showMessage}
+                autoHideDuration={6000}
+                onClose={() => setShowMessage(false)}
+                message='Sign up Successfully'
+            />
+            <div className='flex text-2xl justify-center sm:mx-3 font-bold'>
+                <h1>Create Your fan Account </h1>
+            </div>
+            <form onSubmit={handleSignup}>
+                {/* {(errors.first_name || errors.last_name || errors.username || errors.email || errors.password) && <span>All dields are required!</span>} */}
+                <div className='flex justify-center py-5 mx-2 sm:mx-5 flex-col'>
+                    <label for='tittle'>Your Name</label>
+                    <input
+                        className='border-2 py-2 px-3 my-3 rounded-full hover:border-green-400 text-black'
+                        name='first_name'
+                        type='text'
+                        placeholder='First Name'
+                        // {...register("first_name", {required: true})}
+                        onChange={handleChange}
+                    />
 
-                                <label for="tittle">Last name</label>
-                                <input className='border-2 py-2 my-3 rounded-full hover:border-green-400 '
-                                    name='Last name'
-                                    type="text"
-                                    placeholder='Last name'
-                                />
+                    <label for='tittle'>Last name</label>
+                    <input
+                        className='border-2 py-2 px-3 my-3 rounded-full hover:border-green-400 text-black'
+                        name='last_name'
+                        type='text'
+                        placeholder='Last name'
+                        // {...register("last_name", {required: true})}
+                        onChange={handleChange}
+                    />
 
-                                <label for="tittle">Username</label>
-                                <input className='border-2 py-2 my-3 rounded-full hover:border-green-400 '
-                                    name='Username'
-                                    type="text"
-                                    placeholder='Username'
-                                />
+                    <label for='tittle'>Username</label>
+                    <input
+                        className='border-2 py-2 px-3 my-3 rounded-full hover:border-green-400 text-black'
+                        name='username'
+                        type='text'
+                        placeholder='Username'
+                        // {...register("username", {required: true})}
+                        onChange={handleChange}
+                    />
 
-                                <label for="tittle">Email</label>
-                                <input className='border-2 py-2 my-3 rounded-full hover:border-green-400 '
-                                    name='Email'
-                                    type="text"
-                                    placeholder='Email'
-                                />
+                    <label for='tittle'>Email</label>
+                    <input
+                        className='border-2 py-2 px-3 my-3 rounded-full hover:border-green-400 text-black'
+                        name='email'
+                        type='text'
+                        placeholder='Email'
+                        // {...register("email", {required: true})}
+                        onChange={handleChange}
+                    />
 
-                                <label for="tittle">Password</label>
-                                <input className='border-2 py-2 my-3 rounded-full hover:border-green-400 '
-                                    name='Password'
-                                    type="password"
-                                    placeholder='Password'
-                                />
+                    <label for='tittle'>Password</label>
+                    <input
+                        className='border-2 py-2 px-3 my-3 rounded-full hover:border-green-400 text-black'
+                        name='password'
+                        type='password'
+                        placeholder='Password'
+                        // {...register("password", {required: true})}
+                        onChange={handleChange}
+                    />
 
-                                <div className='flex justify-center py-4 '>
-                                    <p> I agree to the Terms and Conditions </p>
-                                </div>
+                    <div className='flex justify-center py-4 '>
+                        <p> I agree to the Terms and Conditions </p>
+                    </div>
 
-                                <div className='flex bg-green-400 hover:bg-green-500 mx-auto w-3/5 justify-center rounded-full'>
-                                    <button className="py-3">
-                                        SIGN UP
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                    <div className='flex bg-green-400 hover:bg-green-500 mx-auto w-3/5 justify-center rounded-full'>
+                        <button type='submit' className='py-3'>
+                            SIGN UP
+                        </button>
                     </div>
                 </div>
-            </div>
+            </form>
         </>
-    )
+    );
 };
 
 export default From;
